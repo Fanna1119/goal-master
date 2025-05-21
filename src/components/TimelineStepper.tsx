@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DayStep from './DayStep';
 import GoalSetting from './GoalSetting';
+import HeatmapModal from './HeatmapModal';
 import { useTimelineStore } from '../store/timelineStore';
-import { ArrowRight, Calendar, Plus, Moon, Sun, CheckCheck } from 'lucide-react';
+import { ArrowRight, Calendar, Plus, Moon, Sun, BarChart2, CheckCheck } from 'lucide-react';
 
 const TimelineStepper: React.FC = () => {
+  const [isHeatmapOpen, setIsHeatmapOpen] = useState(false);
   const state = useTimelineStore();
   const { addTodo, updateTodo, deleteTodo, advanceDay, updateGoal, addDay, toggleDarkMode } = useTimelineStore();
 
@@ -23,7 +25,15 @@ const TimelineStepper: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
       <header className="mb-8 text-center">
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-end mb-4 gap-2">
+          <button
+            onClick={() => setIsHeatmapOpen(true)}
+            className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors flex items-center gap-2"
+            aria-label="Show heatmap"
+          >
+            <BarChart2 size={20} />
+            <span>Activity</span>
+          </button>
           <button
             onClick={toggleDarkMode}
             className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
@@ -32,7 +42,6 @@ const TimelineStepper: React.FC = () => {
             {state.isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
         </div>
-        {/* <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Timeline Stepper</h1> */}
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           <CheckCheck color='#5fe081' size={32} className="inline-block mr-2" />
           Goal Master
@@ -94,6 +103,12 @@ const TimelineStepper: React.FC = () => {
           />
         ))}
       </div>
+
+      <HeatmapModal
+        isOpen={isHeatmapOpen}
+        onClose={() => setIsHeatmapOpen(false)}
+        days={state.days}
+      />
     </div>
   );
 };

@@ -192,6 +192,11 @@ export const useTimelineState = () => {
     }));
   };
 
+  const resetAll = () => {
+    const initialState = getInitialState();
+    setState(initialState);
+  }
+
   return {
     state,
     addTodo,
